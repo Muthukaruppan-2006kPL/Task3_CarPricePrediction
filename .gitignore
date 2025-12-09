@@ -1,3 +1,18 @@
-.venv/
+# Python cache files
 __pycache__/
-*.pkl
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment
+venv/
+env/
+
+# VSCode settings
+.vscode/
+
+# Environment variables
+.env

@@ -1,40 +1,43 @@
-# 🚗 Task 3 – Car Price Prediction Using Machine Learning
+# Car Price Prediction – Machine Learning Project
 
-This project predicts the **selling price of used cars** using machine learning.  
-The dataset used is from **CarDekho** and contains features like:
+This project predicts the selling price of a car based on its features such as year, mileage, fuel type, transmission type, engine size, and more.
 
-- Year
-- KM Driven
-- Fuel Type
-- Seller Type
-- Transmission
-- Owner
-- Selling Price
+📌 Project Objective
 
----
+To build a machine learning model that can accurately estimate car prices using regression algorithms.
 
-## 📌 Technologies Used
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Scikit-Learn
-- Linear Regression
-- Joblib
+📊 Workflow
 
----
+Importing libraries
 
-## 📌 Steps Performed
-1. Loaded the CarDekho dataset.
-2. Cleaned and preprocessed data.
-3. Converted categorical data to numerical using one-hot encoding.
-4. Split data into training & testing.
-5. Trained a Linear Regression model.
-6. Evaluated using MSE and R² score.
-7. Saved model as `car_price_model.pkl`.
-8. Added an interactive user input prediction system.
+Data loading
 
----
+Data cleaning & handling missing values
 
-## 📌 How to Run
+Exploratory Data Analysis (EDA)
+
+Feature selection & encoding
+
+Model training (Linear Regression / Random Forest)
+
+Model evaluation
+
+Predictions
+
+🧠 Algorithms Used
+
+Linear Regression
+
+Random Forest Regressor
+
+📁 Contents
+
+car_price_prediction.ipynb – Main notebook
+
+car_data.csv – Dataset
+
+README.md – Documentation
+
+🚀 Output
+
+The model predicts accurate car prices based on user-entered features.
