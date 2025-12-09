@@ -1,43 +1,168 @@
-# Car Price Prediction – Machine Learning Project
+🚗 Car Price Prediction using Machine Learning
 
-This project predicts the selling price of a car based on its features such as year, mileage, fuel type, transmission type, engine size, and more.
+This project predicts the selling price of used cars based on various features such as brand, year, kilometers driven, fuel type, transmission type, and more.
+A Linear Regression model is used to analyze the patterns and make accurate price predictions.
 
-📌 Project Objective
+📌 Table of Contents
 
-To build a machine learning model that can accurately estimate car prices using regression algorithms.
+📘 Project Overview
 
-📊 Workflow
+📂 Dataset Details
 
-Importing libraries
+🛠️ Technologies Used
 
-Data loading
+⚙️ Project Workflow
 
-Data cleaning & handling missing values
+🤖 Machine Learning Model
 
-Exploratory Data Analysis (EDA)
+📊 Results
 
-Feature selection & encoding
+💻 How to Run
 
-Model training (Linear Regression / Random Forest)
+📁 Project Structure
 
-Model evaluation
+📸 Output Screenshots
+
+📝 License
+
+📘 Project Overview
+
+Used car prices vary based on many factors such as brand, model, mileage, and year.
+This project uses Linear Regression to build a model that can predict car prices based on historical data.
+
+The process includes:
+
+Data collection
+
+Cleaning & preprocessing
+
+Feature engineering
+
+Model training
+
+Evaluation
 
 Predictions
 
-🧠 Algorithms Used
+📂 Dataset Details
 
-Linear Regression
+File: cardekho.csv
+Source: CarDekho (Used Cars Dataset)
 
-Random Forest Regressor
+Dataset contains columns like:
 
-📁 Contents
+Year
 
-car_price_prediction.ipynb – Main notebook
+Selling_Price
 
-car_data.csv – Dataset
+Present_Price
 
-README.md – Documentation
+Driven_kms
 
-🚀 Output
+Fuel_Type
 
-The model predicts accurate car prices based on user-entered features.
+Seller_Type
+
+Transmission
+
+Owner
+
+🛠️ Technologies Used
+
+Python
+
+Pandas
+
+NumPy
+
+Matplotlib
+
+Seaborn
+
+Scikit-Learn
+
+Jupyter Notebook
+
+⚙️ Project Workflow
+
+Load and explore the dataset
+
+Handle missing values
+
+Convert categorical features using encoding
+
+Split data into training and testing sets
+
+Train the Linear Regression model
+
+Evaluate using metrics (MAE, MSE, RMSE)
+
+Save the model (pickle file)
+
+Make predictions
+
+🤖 Machine Learning Model
+Linear Regression Model
+
+This model finds the best-fit line that maps the relationship between car features and selling price.
+
+Why Linear Regression?
+✔ Simple and interpretable
+✔ Works well on numerical datasets
+✔ Good baseline model for regression problems
+
+Model file: car_price_model.pkl
+
+📊 Results
+
+Your model was successfully trained using Linear Regression.
+
+Typical evaluation metrics:
+
+MAE – Average error in prediction
+
+MSE – Squared error
+
+RMSE – Root mean squared error
+
+(You can add your exact values here if needed.)
+
+💻 How to Run
+1️⃣ Clone the repository
+git clone https://github.com/Muthukaruppan-2006kPL/Task3_CarPricePrediction.git
+
+2️⃣ Install dependencies
+pip install -r requirements.txt
+
+3️⃣ Run the notebook
+
+Open:
+
+car_price_prediction.ipynb
+
+4️⃣ To load the model:
+import pickle
+
+model = pickle.load(open("car_price_model.pkl", "rb"))
+
+📁 Project Structure
+│── car_price_prediction.ipynb
+│── car_price_model.pkl
+│── cardekho.csv
+│── requirements.txt
+│── README.md
+│── .gitignore
+
+📸 Output Screenshots
+
+(Add your model results, plots, or sample prediction images here.)
+Example:
+
+images/
+   ├── scatter_plot.png
+   ├── heatmap.png
+
+📝 License
+
+This project is part of the CodeAlpha Internship – Machine Learning Tasks.
+Feel free to use and modify it for educational purposes.
