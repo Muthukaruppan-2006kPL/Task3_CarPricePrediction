@@ -1,21 +1,32 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import pickle
+import numpy as np
 
+# Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Allows frontend to communicate with backend
 
-# Dummy function to predict car price
-def predict_price(year, mileage):
-    # Replace this with your ML model later
-    return (2025 - int(year)) * 1000 + int(mileage) * 0.5
+# Load your trained ML model
+with open('car_price_model.pkl', 'rb') as f:
+    model = pickle.load(f)
 
+# Function to predict car price using the model
+def predict_price(year, mileage):
+    # Make sure input format matches what your model expects
+    X = np.array([[year, mileage]])  # 2D array for single prediction
+    price = model.predict(X)[0]     # model.predict returns array
+    return round(price, 2)          # Round to 2 decimal places
+
+# API endpoint for prediction
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
-    year = data['year']
-    mileage = data['mileage']
+    year = int(data['year'])
+    mileage = float(data['mileage'])
     price = predict_price(year, mileage)
     return jsonify({'price': price})
 
+# Run the app
 if __name__ == '__main__':
     app.run(debug=True)
