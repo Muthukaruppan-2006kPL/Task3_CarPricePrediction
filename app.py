@@ -7,23 +7,38 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)  # Allows frontend to communicate with backend
 
-# Load your trained ML model using joblib
+# Load your trained ML model
 model = joblib.load('car_price_model.pkl')
 
-# Function to predict car price using the model
-def predict_price(year, mileage):
-    # Ensure input format matches what your model expects
-    X = np.array([[year, mileage]])  # 2D array for single prediction
-    price = model.predict(X)[0]     # model.predict returns an array
-    return round(price, 2)          # Round to 2 decimal places
+# Function to predict car price using all features
+def predict_price(features):
+    X = np.array([features])  # Convert to 2D array
+    price = model.predict(X)[0]
+    return round(price, 2)
 
 # API endpoint for prediction
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
-    year = int(data['year'])
-    mileage = float(data['mileage'])
-    price = predict_price(year, mileage)
+
+    # Collect all 13 features in the order your model expects
+    features = [
+        int(data['year']),
+        float(data['mileage']),
+        int(data['brand_encoded']),
+        int(data['fuel_encoded']),
+        int(data['transmission_encoded']),
+        int(data['owner_encoded']),
+        float(data['engine']),
+        float(data['power']),
+        float(data['seats']),
+        int(data['location_encoded']),
+        float(data['some_feature_11']),
+        float(data['some_feature_12']),
+        float(data['some_feature_13'])
+    ]
+
+    price = predict_price(features)
     return jsonify({'price': price})
 
 # Run the app
