@@ -2,41 +2,39 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+
+@app.route('/')
+def home():
+    return "Car Price Prediction API is running"
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    try:
-        data = request.json
+    data = request.json
+    features = np.array([[
+        data['year'],
+        data['mileage'],
+        data['brand_encoded'],
+        data['fuel_encoded'],
+        data['transmission_encoded'],
+        data['owner_encoded'],
+        data['engine'],
+        data['power'],
+        data['seats'],
+        data['location_encoded'],
+        data['some_feature_11'],
+        data['some_feature_12'],
+        data['some_feature_13']
+    ]])
 
-        # Read input EXACTLY as sent from frontend
-        features = [
-            float(data['year']),
-            float(data['mileage']),
-            float(data['brand_encoded']),
-            float(data['fuel_encoded']),
-            float(data['transmission_encoded']),
-            float(data['owner_encoded']),
-            float(data['engine']),
-            float(data['power']),
-            float(data['seats']),
-            float(data['location_encoded']),
-            float(data['some_feature_11']),
-            float(data['some_feature_12']),
-            float(data['some_feature_13'])
-        ]
+    model = pickle.load(open('model.pkl', 'rb'))
+    prediction = model.predict(features)[0]
 
-        # Dummy prediction logic
-        result = sum(features) * 1000
+    if prediction < 0:
+        prediction = 0
 
-        # Remove negative values
-        if result < 0:
-            result = 0
+    return jsonify({'price': prediction})
 
-        return jsonify({'price': round(result, 2)})
-
-    except Exception as e:
-        return jsonify({'error': str(e)})
+        
 
 if __name__ == '__main__':
     app.run(debug=True)
