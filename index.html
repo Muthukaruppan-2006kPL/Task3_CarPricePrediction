@@ -53,35 +53,34 @@
 
   <script>
     const form = document.getElementById('carForm');
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Collect all inputs
       const data = {
-        year: document.getElementById('year').value,
-        mileage: document.getElementById('mileage').value,
-        brand_encoded: document.getElementById('brand_encoded').value,
-        fuel_encoded: document.getElementById('fuel_encoded').value,
-        transmission_encoded: document.getElementById('transmission_encoded').value,
-        owner_encoded: document.getElementById('owner_encoded').value,
-        engine: document.getElementById('engine').value,
-        power: document.getElementById('power').value,
-        seats: document.getElementById('seats').value,
-        location_encoded: document.getElementById('location_encoded').value,
-        some_feature_11: document.getElementById('some_feature_11').value,
-        some_feature_12: document.getElementById('some_feature_12').value,
-        some_feature_13: document.getElementById('some_feature_13').value
+        year: Number(document.getElementById('year').value),
+        mileage: Number(document.getElementById('mileage').value),
+        brand_encoded: Number(document.getElementById('brand_encoded').value),
+        fuel_encoded: Number(document.getElementById('fuel_encoded').value),
+        transmission_encoded: Number(document.getElementById('transmission_encoded').value),
+        owner_encoded: Number(document.getElementById('owner_encoded').value),
+        engine: Number(document.getElementById('engine').value),
+        power: Number(document.getElementById('power').value),
+        seats: Number(document.getElementById('seats').value),
+        location_encoded: Number(document.getElementById('location_encoded').value),
+        some_feature_11: Number(document.getElementById('some_feature_11').value),
+        some_feature_12: Number(document.getElementById('some_feature_12').value),
+        some_feature_13: Number(document.getElementById('some_feature_13').value)
       };
 
-      const response = await fetch('http://127.0.0.1:5000/predict'
-, { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
       });
 
       const result = await response.json();
-      document.getElementById('result').innerText = "Predicted Price: " + result.price;
+      document.getElementById("result").innerText = "Predicted Price: ₹ " + result.price;
     });
   </script>
 </body>
