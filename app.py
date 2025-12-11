@@ -1,23 +1,27 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import numpy as np
-import pickle
+import joblib   # ← use joblib instead of pickle
 
 app = Flask(__name__)
 CORS(app)
 
-# Load model only once
-model = pickle.load(open('car_price_model.pkl', 'rb'))
+# Load model safely
+model = joblib.load("car_price_model.pkl")
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return "Car Price Prediction API is running"
+
+@app.route('/home')
+def ui():
+    return render_template("index.html")
 
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
 
-    features = np.array([[ 
+    features = np.array([[
         float(data['year']),
         float(data['mileage']),
         float(data['brand_encoded']),
@@ -35,7 +39,6 @@ def predict():
 
     prediction = model.predict(features)[0]
 
-    # avoid negative price
     if prediction < 0:
         prediction = 0
 
