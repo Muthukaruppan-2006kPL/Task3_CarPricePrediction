@@ -1,48 +1,86 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, render_template, request
 import numpy as np
+import joblib
 import pickle
+import os
 
 app = Flask(__name__)
-CORS(app)
 
-# Load model only once
-model = pickle.load(open('car_price_model.pkl', 'rb'))
+# -----------------------------
+# Load Model Safely
+# -----------------------------
+model = None
 
-# Home Route
-@app.route('/')
+# Try joblib first
+if os.path.exists("car_price_model.pkl"):
+    try:
+        model = joblib.load("car_price_model.pkl")
+        print("Model loaded using joblib")
+    except:
+        try:
+            model = pickle.load(open("car_price_model.pkl", "rb"))
+            print("Model loaded using pickle")
+        except Exception as e:
+            print("Model load error:", e)
+
+# If model not found
+if model is None:
+    raise Exception("Model file 'car_price_model.pkl' not loaded. Check filename!")
+
+
+# -----------------------------
+# Routes
+# -----------------------------
+@app.route("/")
 def home():
-    return "Car Price Prediction API is running"
+    return render_template("index.html")
 
-# Prediction Route
-@app.route('/predict', methods=['POST'])
+
+@app.route("/predict", methods=["POST"])
 def predict():
-    data = request.json
+    try:
+        year = int(request.form['year'])
+        present_price = float(request.form['present_price'])
+        kms_driven = int(request.form['kms_driven'])
+        owner = int(request.form['owner'])
+        fuel_type = request.form['fuel_type']
+        seller_type = request.form['seller_type']
+        transmission = request.form['transmission']
 
-    features = np.array([[ 
-        float(data['year']),
-        float(data['mileage']),
-        float(data['brand_encoded']),
-        float(data['fuel_encoded']),
-        float(data['transmission_encoded']),
-        float(data['owner_encoded']),
-        float(data['engine']),
-        float(data['power']),
-        float(data['seats']),
-        float(data['location_encoded']),
-        float(data['some_feature_11']),
-        float(data['some_feature_12']),
-        float(data['some_feature_13'])
-    ]])
+        # Encoding fuel
+        if fuel_type == 'Petrol':
+            fuel_Petrol = 1
+            fuel_Diesel = 0
+        else:
+            fuel_Petrol = 0
+            fuel_Diesel = 1
 
-    # Predict
-    prediction = model.predict(features)[0]
+        # Encoding seller
+        if seller_type == 'Individual':
+            seller_Individual = 1
+        else:
+            seller_Individual = 0
 
-    # Prevent negative price
-    if prediction < 0:
-        prediction = 0
+        # Encoding transmission
+        if transmission == 'Manual':
+            transmission_Manual = 1
+        else:
+            transmission_Manual = 0
 
-    return jsonify({'price': round(prediction, 2)})
+        # Arrange input
+        input_data = np.array([[year, present_price, kms_driven, owner,
+                                fuel_Diesel, fuel_Petrol, seller_Individual,
+                                transmission_Manual]])
 
-if __name__ == '__main__':
+        # Predict
+        prediction = model.predict(input_data)[0]
+        output = round(prediction, 2)
+
+        return render_template("index.html", prediction_text=f"Predicted Car Price: ₹{output} Lakhs")
+
+    except Exception as e:
+        return render_template("index.html", prediction_text=f"Error: {e}")
+
+
+if __name__ == "__main__":
     app.run(debug=True)
