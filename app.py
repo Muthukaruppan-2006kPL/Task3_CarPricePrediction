@@ -11,7 +11,8 @@ model = joblib.load("car_price_model.pkl")
 
 @app.route('/')
 def home():
-    return "Car Price Prediction API is running"
+    return render_template('index.html')
+
 
 @app.route('/home')
 def ui():
