@@ -6,6 +6,9 @@ import pickle
 app = Flask(__name__)
 CORS(app)
 
+# Load model only once
+model = pickle.load(open('model.pkl', 'rb'))
+
 # Home Route
 @app.route('/')
 def home():
@@ -16,7 +19,6 @@ def home():
 def predict():
     data = request.json
 
-    # Convert input to numpy array
     features = np.array([[ 
         float(data['year']),
         float(data['mileage']),
@@ -32,9 +34,6 @@ def predict():
         float(data['some_feature_12']),
         float(data['some_feature_13'])
     ]])
-
-    # Load model
-    model = pickle.load(open('model.pkl', 'rb'))
 
     # Predict
     prediction = model.predict(features)[0]
