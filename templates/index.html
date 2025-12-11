@@ -1,87 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Car Price Predictor</title>
+    <title>Car Price Prediction</title>
 </head>
 <body>
-  <h1>Car Price Prediction</h1>
-  
-  <form id="carForm">
-    <label>Year:</label>
-    <input type="number" id="year" required><br><br>
 
-    <label>Mileage:</label>
-    <input type="number" id="mileage" required><br><br>
+<h1>Car Price Prediction</h1>
 
-    <label>Brand (Encoded):</label>
-    <input type="number" id="brand_encoded" required><br><br>
+<form id="predictionForm">
+    
+    Name: <input type="text" id="name" /><br><br>
 
-    <label>Fuel (Encoded):</label>
-    <input type="number" id="fuel_encoded" required><br><br>
+    Year: <input type="number" id="year" /><br><br>
 
-    <label>Transmission (Encoded):</label>
-    <input type="number" id="transmission_encoded" required><br><br>
+    KM Driven: <input type="number" id="km_driven" /><br><br>
 
-    <label>Owner (Encoded):</label>
-    <input type="number" id="owner_encoded" required><br><br>
+    Fuel: 
+    <select id="fuel">
+        <option value="Petrol">Petrol</option>
+        <option value="Diesel">Diesel</option>
+        <option value="CNG">CNG</option>
+        <option value="LPG">LPG</option>
+        <option value="Electric">Electric</option>
+    </select><br><br>
 
-    <label>Engine:</label>
-    <input type="number" step="0.1" id="engine" required><br><br>
+    Seller Type:
+    <select id="seller_type">
+        <option value="Individual">Individual</option>
+        <option value="Dealer">Dealer</option>
+        <option value="Trustmark Dealer">Trustmark Dealer</option>
+    </select><br><br>
 
-    <label>Power:</label>
-    <input type="number" step="0.1" id="power" required><br><br>
+    Transmission:
+    <select id="transmission">
+        <option value="Manual">Manual</option>
+        <option value="Automatic">Automatic</option>
+    </select><br><br>
 
-    <label>Seats:</label>
-    <input type="number" step="0.1" id="seats" required><br><br>
-
-    <label>Location (Encoded):</label>
-    <input type="number" id="location_encoded" required><br><br>
-
-    <label>Feature 11:</label>
-    <input type="number" step="0.1" id="some_feature_11" required><br><br>
-
-    <label>Feature 12:</label>
-    <input type="number" step="0.1" id="some_feature_12" required><br><br>
-
-    <label>Feature 13:</label>
-    <input type="number" step="0.1" id="some_feature_13" required><br><br>
+    Owner:
+    <select id="owner">
+        <option value="First Owner">First Owner</option>
+        <option value="Second Owner">Second Owner</option>
+        <option value="Third Owner">Third Owner</option>
+        <option value="Fourth & Above Owner">Fourth & Above Owner</option>
+    </select><br><br>
 
     <button type="submit">Predict Price</button>
-  </form>
+</form>
 
-  <h2 id="result"></h2>
+<h2 id="result"></h2>
 
-  <script>
-    const form = document.getElementById('carForm');
+<script>
+    document.getElementById("predictionForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+        const data = {
+            name: document.getElementById("name").value,
+            year: Number(document.getElementById("year").value),
+            km_driven: Number(document.getElementById("km_driven").value),
+            fuel: document.getElementById("fuel").value,
+            seller_type: document.getElementById("seller_type").value,
+            transmission: document.getElementById("transmission").value,
+            owner: document.getElementById("owner").value
+        };
 
-      const data = {
-        year: Number(document.getElementById('year').value),
-        mileage: Number(document.getElementById('mileage').value),
-        brand_encoded: Number(document.getElementById('brand_encoded').value),
-        fuel_encoded: Number(document.getElementById('fuel_encoded').value),
-        transmission_encoded: Number(document.getElementById('transmission_encoded').value),
-        owner_encoded: Number(document.getElementById('owner_encoded').value),
-        engine: Number(document.getElementById('engine').value),
-        power: Number(document.getElementById('power').value),
-        seats: Number(document.getElementById('seats').value),
-        location_encoded: Number(document.getElementById('location_encoded').value),
-        some_feature_11: Number(document.getElementById('some_feature_11').value),
-        some_feature_12: Number(document.getElementById('some_feature_12').value),
-        some_feature_13: Number(document.getElementById('some_feature_13').value)
-      };
+        const response = await fetch("http://localhost:5000/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
 
-      const response = await fetch("http://localhost:5000/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.json();
-      document.getElementById("result").innerText = "Predicted Price: ₹ " + result.price;
+        const result = await response.json();
+        document.getElementById("result").innerText = "Predicted Price: ₹ " + result.predicted_price;
     });
-  </script>
+</script>
+
 </body>
 </html>
