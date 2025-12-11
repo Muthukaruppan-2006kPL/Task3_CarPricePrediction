@@ -1,33 +1,43 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, render_template, request
 import pickle
+import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
 
-# Load model
+# Load Model
 model = pickle.load(open("car_price_model.pkl", "rb"))
 
-@app.route("/")
+@app.route('/')
 def home():
     return render_template("index.html")
 
-@app.route("/predict", methods=["POST"])
+@app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
+    name = request.form['name']
+    year = int(request.form['year'])
+    km_driven = int(request.form['km_driven'])
+    fuel = request.form['fuel']
+    seller_type = request.form['seller_type']
+    transmission = request.form['transmission']
+    owner = request.form['owner']
 
-    df = pd.DataFrame([{
-        "name": data["name"],
-        "year": data["year"],
-        "km_driven": data["km_driven"],
-        "fuel": data["fuel"],
-        "seller_type": data["seller_type"],
-        "transmission": data["transmission"],
-        "owner": data["owner"]
-    }])
+    new_data = pd.DataFrame({
+        "name": [name],
+        "year": [year],
+        "km_driven": [km_driven],
+        "fuel": [fuel],
+        "seller_type": [seller_type],
+        "transmission": [transmission],
+        "owner": [owner]
+    })
 
-    result = model.predict(df)[0]
+    prediction = model.predict(new_data)[0]
 
-    return jsonify({"predicted_price": max(0, round(result, 2))})
+    prediction = max(0, prediction)
+
+    return render_template("index.html", result=round(prediction, 2))
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,22 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Car Price Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 6px;
+            width: 250px;
+            margin-top: 5px;
+        }
+        button {
+            padding: 8px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 25px;
+            font-size: 22px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
 <h1>Car Price Prediction</h1>
 
-<form id="predictionForm">
-    
-    Name: <input type="text" id="name" /><br><br>
+<form action="/predict" method="POST">
 
-    Year: <input type="number" id="year" /><br><br>
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br><br>
 
-    KM Driven: <input type="number" id="km_driven" /><br><br>
+    <label>Year:</label><br>
+    <input type="number" name="year" required><br><br>
 
-    Fuel: 
-    <select id="fuel">
+    <label>KM Driven:</label><br>
+    <input type="number" name="km_driven" required><br><br>
+
+    <label>Fuel:</label><br>
+    <select name="fuel" required>
         <option value="Petrol">Petrol</option>
         <option value="Diesel">Diesel</option>
         <option value="CNG">CNG</option>
@@ -24,56 +54,37 @@
         <option value="Electric">Electric</option>
     </select><br><br>
 
-    Seller Type:
-    <select id="seller_type">
+    <label>Seller Type:</label><br>
+    <select name="seller_type" required>
         <option value="Individual">Individual</option>
         <option value="Dealer">Dealer</option>
         <option value="Trustmark Dealer">Trustmark Dealer</option>
     </select><br><br>
 
-    Transmission:
-    <select id="transmission">
+    <label>Transmission:</label><br>
+    <select name="transmission" required>
         <option value="Manual">Manual</option>
         <option value="Automatic">Automatic</option>
     </select><br><br>
 
-    Owner:
-    <select id="owner">
+    <label>Owner:</label><br>
+    <select name="owner" required>
         <option value="First Owner">First Owner</option>
         <option value="Second Owner">Second Owner</option>
         <option value="Third Owner">Third Owner</option>
-        <option value="Fourth & Above Owner">Fourth & Above Owner</option>
+        <option value="Fourth Owner">Fourth Owner</option>
+        <option value="Test Drive Car">Test Drive Car</option>
     </select><br><br>
 
     <button type="submit">Predict Price</button>
+
 </form>
 
-<h2 id="result"></h2>
-
-<script>
-    document.getElementById("predictionForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const data = {
-            name: document.getElementById("name").value,
-            year: Number(document.getElementById("year").value),
-            km_driven: Number(document.getElementById("km_driven").value),
-            fuel: document.getElementById("fuel").value,
-            seller_type: document.getElementById("seller_type").value,
-            transmission: document.getElementById("transmission").value,
-            owner: document.getElementById("owner").value
-        };
-
-        const response = await fetch("http://localhost:5000/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-        document.getElementById("result").innerText = "Predicted Price: ₹ " + result.predicted_price;
-    });
-</script>
+{% if result %}
+    <div class="result">
+        Predicted Price: ₹ {{ result }}
+    </div>
+{% endif %}
 
 </body>
 </html>
