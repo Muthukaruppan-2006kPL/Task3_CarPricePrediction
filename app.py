@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load model only once
-model = pickle.load(open('model.pkl', 'rb'))
+model = pickle.load(open('car_price_model.pkl', 'rb'))
 
 # Home Route
 @app.route('/')
