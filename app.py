@@ -5,7 +5,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load your model
-model = pickle.load(open("model.pkl", "rb"))
+model = pickle.load(open("car_price_model.pkl", "rb"))
 
 @app.route("/")
 def home():
