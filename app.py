@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='static')
 
 # Load Model
 model = pickle.load(open("car_price_model.pkl", "rb"))
