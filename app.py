@@ -1,43 +1,33 @@
 from flask import Flask, render_template, request
 import pickle
 import numpy as np
-import pandas as pd
 
-app = Flask(__name__,static_folder='static')
+app = Flask(__name__)
 
-# Load Model
-model = pickle.load(open("car_price_model.pkl", "rb"))
+# Load your model
+model = pickle.load(open("model.pkl", "rb"))
 
-@app.route('/')
+@app.route("/")
 def home():
     return render_template("index.html")
 
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
-    name = request.form['name']
-    year = int(request.form['year'])
-    km_driven = int(request.form['km_driven'])
-    fuel = request.form['fuel']
-    seller_type = request.form['seller_type']
-    transmission = request.form['transmission']
-    owner = request.form['owner']
+    try:
+        year = int(request.form.get("year"))
+        km_driven = int(request.form.get("km"))
+        fuel = int(request.form.get("fuel"))
+        seller = int(request.form.get("seller"))
+        transmission = int(request.form.get("transmission"))
+        owner = int(request.form.get("owner"))
 
-    new_data = pd.DataFrame({
-        "name": [name],
-        "year": [year],
-        "km_driven": [km_driven],
-        "fuel": [fuel],
-        "seller_type": [seller_type],
-        "transmission": [transmission],
-        "owner": [owner]
-    })
+        features = np.array([[year, km_driven, fuel, seller, transmission, owner]])
+        prediction = model.predict(features)[0]
 
-    prediction = model.predict(new_data)[0]
+        return render_template("index.html", result=round(prediction, 2))
 
-    prediction = max(0, prediction)
-
-    return render_template("index.html", result=round(prediction, 2))
-
+    except Exception as e:
+        return render_template("index.html", result=f"Error: {e}")
 
 if __name__ == "__main__":
     app.run(debug=True)
