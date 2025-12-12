@@ -2,89 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Price Prediction</title>
+
     <style>
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            margin: 40px;
+            overflow-x: hidden;
         }
-        h1 {
-            font-size: 32px;
-            font-weight: bold;
+
+        /* HERO SECTION */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
         }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(60%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            color: #ffffff;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .hero-content h1 {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .hero-content p {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: #ff6600;
+            padding: 12px 22px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #ff4500;
+        }
+
+        /* FORM SECTION */
+        .container {
+            width: 40%;
+            margin: 60px auto;
+        }
+
         input, select {
-            padding: 6px;
-            width: 250px;
-            margin-top: 5px;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
         }
-        button {
-            padding: 8px 20px;
-            margin-top: 20px;
+
+        .predict-btn {
+            background: #007bff;
+            border: none;
+            padding: 14px;
+            color: white;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 18px;
             cursor: pointer;
         }
+
+        .predict-btn:hover {
+            background: #0056b3;
+        }
+
         .result {
-            margin-top: 25px;
+            text-align: center;
+            margin-top: 20px;
             font-size: 22px;
-            color: green;
             font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
+
 <body>
 
-<h1>Car Price Prediction</h1>
+    <!-- HERO SECTION WITH VIDEO -->
+    <div class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="static/video.mp4" type="video/mp4">
+        </video>
 
-<form action="/predict" method="POST">
-
-    <label>Name:</label><br>
-    <input type="text" name="name" required><br><br>
-
-    <label>Year:</label><br>
-    <input type="number" name="year" required><br><br>
-
-    <label>KM Driven:</label><br>
-    <input type="number" name="km_driven" required><br><br>
-
-    <label>Fuel:</label><br>
-    <select name="fuel" required>
-        <option value="Petrol">Petrol</option>
-        <option value="Diesel">Diesel</option>
-        <option value="CNG">CNG</option>
-        <option value="LPG">LPG</option>
-        <option value="Electric">Electric</option>
-    </select><br><br>
-
-    <label>Seller Type:</label><br>
-    <select name="seller_type" required>
-        <option value="Individual">Individual</option>
-        <option value="Dealer">Dealer</option>
-        <option value="Trustmark Dealer">Trustmark Dealer</option>
-    </select><br><br>
-
-    <label>Transmission:</label><br>
-    <select name="transmission" required>
-        <option value="Manual">Manual</option>
-        <option value="Automatic">Automatic</option>
-    </select><br><br>
-
-    <label>Owner:</label><br>
-    <select name="owner" required>
-        <option value="First Owner">First Owner</option>
-        <option value="Second Owner">Second Owner</option>
-        <option value="Third Owner">Third Owner</option>
-        <option value="Fourth Owner">Fourth Owner</option>
-        <option value="Test Drive Car">Test Drive Car</option>
-    </select><br><br>
-
-    <button type="submit">Predict Price</button>
-
-</form>
-
-{% if result %}
-    <div class="result">
-        Predicted Price: ₹ {{ result }}
+        <div class="hero-content">
+            <h1>Car Price Prediction</h1>
+            <p>Predict accurate car prices instantly using Machine Learning</p>
+            <a href="#predict-form" class="btn">Predict Now</a>
+        </div>
     </div>
-{% endif %}
+
+    <!-- PREDICTION FORM -->
+    <div class="container" id="predict-form">
+        <h2>Enter Car Details</h2>
+
+        <form action="/predict" method="post">
+
+            <input type="number" name="year" placeholder="Car Manufacturing Year" required>
+            <input type="number" name="km_driven" placeholder="Kilometers Driven" required>
+            <input type="text" name="fuel" placeholder="Fuel Type (Petrol/Diesel/CNG)" required>
+            <input type="text" name="seller" placeholder="Seller Type (Dealer/Individual)" required>
+            <input type="text" name="transmission" placeholder="Transmission (Manual/Automatic)" required>
+            <input type="number" name="owner" placeholder="Number of Previous Owners" required>
+
+            <button type="submit" class="predict-btn">Predict Price</button>
+        </form>
+
+        <div class="result">
+            {% if prediction %}
+                Predicted Price: ₹ {{ prediction }}
+            {% endif %}
+        </div>
+
+    </div>
 
 </body>
 </html>
