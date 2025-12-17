@@ -3,109 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <title>Smart Car Valuation</title>
-    <img 
-  src="{{ url_for('static', filename='car.jpg') }}" 
-  alt="Car Image" 
-  class="car-image">
+
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: radial-gradient(circle at top, #0f3d3e, #000);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: white;
+            background: linear-gradient(135deg, #061c1c, #0b3a3a);
+            font-family: Arial, sans-serif;
         }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .car-img img {
+            width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0,255,200,0.4);
+        }
+
         .card {
-            width: 380px;
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(12px);
-            border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 0 30px rgba(0,255,200,0.3);
+            background: #1f3b3b;
+            padding: 30px;
+            width: 350px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 0 30px rgba(0,255,200,0.4);
         }
-        h1 {
+
+        h2 {
             text-align: center;
             margin-bottom: 5px;
         }
+
         p {
             text-align: center;
-            color: #ccc;
-            margin-bottom: 15px;
+            font-size: 14px;
+            opacity: 0.8;
         }
+
         input, select, button {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
             border-radius: 8px;
             border: none;
-            outline: none;
         }
+
         button {
-            background: #00ffcc;
-            color: black;
+            background: #00ffc8;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
         }
-        button:hover {
-            background: #00ccaa;
-        }
+
         .result {
-            text-align: center;
             margin-top: 15px;
-            font-size: 20px;
-            color: #00ff99;
+            text-align: center;
+            font-size: 18px;
+            color: #00ffc8;
         }
-        .car-image {
-  width: 100%;
-  max-width: 380px;
-  border-radius: 15px;
-  margin: 20px auto;
-  display: block;
-}
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Smart Car Valuation</h1>
-    <p>AI Powered Price Estimation</p>
+<div class="container">
 
-    <form action="/predict" method="post">
-        <input type="number" name="year" placeholder="Year of Purchase" required>
-        <input type="number" name="km_driven" placeholder="Kilometers Driven" required>
+    <div class="car-img">
+        <img src="{{ url_for('static', filename='car.jpeg') }}" alt="Car Image">
+    </div>
 
-        <select name="fuel" required>
-            <option>Petrol</option>
-            <option>Diesel</option>
-        </select>
+    <div class="card">
+        <h2>Smart Car Valuation</h2>
+        <p>AI Powered Price Estimation</p>
 
-        <select name="seller" required>
-            <option>Individual</option>
-            <option>Dealer</option>
-        </select>
+        <form action="/predict" method="post">
+            <input type="number" name="year" placeholder="Year of Purchase" required>
+            <input type="number" name="km_driven" placeholder="Kilometers Driven" required>
 
-        <select name="transmission" required>
-            <option>Manual</option>
-            <option>Automatic</option>
-        </select>
+            <select name="fuel">
+                <option>Petrol</option>
+                <option>Diesel</option>
+                <option>CNG</option>
+                <option>LPG</option>
+            </select>
 
-        <select name="owner" required>
-            <option>First Owner</option>
-            <option>Second Owner</option>
-        </select>
+            <select name="seller">
+                <option>Individual</option>
+                <option>Dealer</option>
+                <option>Trustmark Dealer</option>
+            </select>
 
-        <button type="submit">Predict Price</button>
-    </form>
+            <select name="transmission">
+                <option>Manual</option>
+                <option>Automatic</option>
+            </select>
 
-    {% if prediction_text %}
-        <div class="result">
-            Predicted Price: {{ prediction_text }}
-        </div>
-    {% endif %}
+            <select name="owner">
+                <option>First Owner</option>
+                <option>Second Owner</option>
+                <option>Third Owner</option>
+            </select>
+
+            <button type="submit">Predict Price</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="result">
+                Predicted Price: {{ prediction_text }}
+            </div>
+        {% endif %}
+    </div>
+
 </div>
 
 </body>
