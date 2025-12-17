@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Smart Car Valuation</title>
+    <img 
+  src="{{ url_for('static', filename='car.jpg') }}" 
+  alt="Car Image" 
+  class="car-image">
     <style>
         body {
             margin: 0;
@@ -55,6 +59,13 @@
             font-size: 20px;
             color: #00ff99;
         }
+        .car-image {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 15px;
+  margin: 20px auto;
+  display: block;
+}
     </style>
 </head>
 <body>

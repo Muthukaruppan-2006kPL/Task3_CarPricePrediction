@@ -4,7 +4,6 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Load trained model
 model = pickle.load(open("car_price_model.pkl", "rb"))
 
 @app.route("/")
@@ -30,22 +29,26 @@ def predict():
         transmission_manual = 1 if transmission == "Manual" else 0
 
         owner_first = 1 if owner == "First Owner" else 0
+        owner_second = 1 if owner == "Second Owner" else 0
 
-        features = np.array([[year, km_driven,
-                              fuel_diesel, fuel_petrol,
-                              seller_individual,
-                              transmission_manual,
-                              owner_first]])
+        input_data = np.array([[year, km_driven,
+                                fuel_diesel, fuel_petrol,
+                                seller_individual,
+                                transmission_manual,
+                                owner_first, owner_second]])
 
-        prediction = model.predict(features)[0]
+        prediction = model.predict(input_data)[0]
 
         return render_template(
             "index.html",
-            prediction_text=f"₹ {prediction:,.2f}"
+            prediction_text=f"₹ {round(prediction, 2)}"
         )
 
     except Exception as e:
-        return render_template("index.html", prediction_text="Error occurred")
+        return render_template(
+            "index.html",
+            prediction_text="Error occurred"
+        )
 
 if __name__ == "__main__":
     app.run(debug=True)
