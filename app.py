@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request
-import numpy as np
 import pickle
+import numpy as np
 
 app = Flask(__name__)
 
+# Load trained model
 model = pickle.load(open("car_price_model.pkl", "rb"))
 
 @app.route("/")
@@ -13,22 +14,38 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        name = int(request.form.get("name"))
-        year = int(request.form.get("year"))
-        km = int(request.form.get("km"))
-        fuel = int(request.form.get("fuel"))
-        seller = int(request.form.get("seller"))
-        transmission = int(request.form.get("transmission"))
-        owner = int(request.form.get("owner"))
+        year = int(request.form["year"])
+        km_driven = int(request.form["km_driven"])
 
-        features = np.array([[name, year, km, fuel, seller, transmission, owner]])
+        fuel = request.form["fuel"]
+        seller = request.form["seller"]
+        transmission = request.form["transmission"]
+        owner = request.form["owner"]
+
+        fuel_petrol = 1 if fuel == "Petrol" else 0
+        fuel_diesel = 1 if fuel == "Diesel" else 0
+
+        seller_individual = 1 if seller == "Individual" else 0
+
+        transmission_manual = 1 if transmission == "Manual" else 0
+
+        owner_first = 1 if owner == "First Owner" else 0
+
+        features = np.array([[year, km_driven,
+                              fuel_diesel, fuel_petrol,
+                              seller_individual,
+                              transmission_manual,
+                              owner_first]])
 
         prediction = model.predict(features)[0]
 
-        return render_template("index.html", result=round(prediction, 2))
+        return render_template(
+            "index.html",
+            prediction_text=f"₹ {prediction:,.2f}"
+        )
 
     except Exception as e:
-        return render_template("index.html", result=f"Error: {e}")
+        return render_template("index.html", prediction_text="Error occurred")
 
 if __name__ == "__main__":
     app.run(debug=True)

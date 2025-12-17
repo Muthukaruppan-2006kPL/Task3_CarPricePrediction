@@ -2,101 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Car Price Predictor</title>
+    <title>Smart Car Valuation</title>
     <style>
         body {
-            background: #f5f5f5;
+            margin: 0;
             font-family: Arial, sans-serif;
-            padding: 40px;
+            background: radial-gradient(circle at top, #0f3d3e, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
         }
-        .container {
-            width: 450px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        .card {
+            width: 380px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(0,255,200,0.3);
         }
-        input, select {
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        p {
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+        input, select, button {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 12px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
         }
         button {
-            width: 100%;
-            padding: 14px;
-            background: #0066ff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
+            background: #00ffcc;
+            color: black;
+            font-weight: bold;
             cursor: pointer;
+            margin-top: 15px;
         }
-        h2 { text-align: center; }
-        .result { text-align: center; margin-top: 20px; color: green; }
+        button:hover {
+            background: #00ccaa;
+        }
+        .result {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 20px;
+            color: #00ff99;
+        }
     </style>
 </head>
-
 <body>
-<div class="container">
 
-    <h2>Car Price Predictor</h2>
+<div class="card">
+    <h1>Smart Car Valuation</h1>
+    <p>AI Powered Price Estimation</p>
 
     <form action="/predict" method="post">
+        <input type="number" name="year" placeholder="Year of Purchase" required>
+        <input type="number" name="km_driven" placeholder="Kilometers Driven" required>
 
-        <label>Car Name</label>
-        <select name="name" required>
-            <option value="0">Maruti</option>
-            <option value="1">Hyundai</option>
-            <option value="2">Honda</option>
-            <option value="3">Toyota</option>
-            <option value="4">Tata</option>
-            <option value="5">Mahindra</option>
+        <select name="fuel" required>
+            <option>Petrol</option>
+            <option>Diesel</option>
         </select>
 
-        <label>Year</label>
-        <input type="number" name="year" value="2018" required>
-
-        <label>KM Driven</label>
-        <input type="number" name="km" value="45000" required>
-
-        <label>Fuel Type</label>
-        <select name="fuel">
-            <option value="0">Diesel</option>
-            <option value="1">Petrol</option>
-            <option value="2">CNG</option>
+        <select name="seller" required>
+            <option>Individual</option>
+            <option>Dealer</option>
         </select>
 
-        <label>Seller Type</label>
-        <select name="seller">
-            <option value="0">Dealer</option>
-            <option value="1">Individual</option>
+        <select name="transmission" required>
+            <option>Manual</option>
+            <option>Automatic</option>
         </select>
 
-        <label>Transmission</label>
-        <select name="transmission">
-            <option value="0">Manual</option>
-            <option value="1">Automatic</option>
-        </select>
-
-        <label>Owner</label>
-        <select name="owner">
-            <option value="0">First Owner</option>
-            <option value="1">Second Owner</option>
-            <option value="2">Third Owner</option>
+        <select name="owner" required>
+            <option>First Owner</option>
+            <option>Second Owner</option>
         </select>
 
         <button type="submit">Predict Price</button>
     </form>
 
-    {% if result %}
+    {% if prediction_text %}
         <div class="result">
-            Predicted Price: ₹ {{ result }} lakhs
+            Predicted Price: {{ prediction_text }}
         </div>
     {% endif %}
-
 </div>
+
 </body>
 </html>
