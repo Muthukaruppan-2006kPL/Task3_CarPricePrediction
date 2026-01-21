@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
-import pickle
+import joblib
 import pandas as pd
 
 app = Flask(__name__)
 
 # Load model
-model = pickle.load(open("car_price_model.pkl", "rb"))
+model = joblib.load("car_price_model.pkl")
 
 @app.route("/")
 def home():
