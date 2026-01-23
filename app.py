@@ -4,7 +4,6 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Load model
 model = joblib.load("car_price_model.pkl")
 
 @app.route("/")
